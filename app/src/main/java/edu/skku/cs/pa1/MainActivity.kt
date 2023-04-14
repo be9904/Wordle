@@ -56,12 +56,23 @@ class MainActivity : AppCompatActivity() {
             letterListYellow.adapter = yellowAdapter
             letterListGreen.adapter = greenAdapter
 
-            // word list view
-            val result = tryWord(inputField.text.toString(), wordArr) // try word on btn click
-            inputField.setText("") // clear input field
+            if(inputField.text.toString().length == 5)
+            {
+                // word list view
+                val result = tryWord(inputField.text.toString(), wordArr) // try word on btn click
+                inputField.text.clear() // clear input field
 
-            // letter list view
-            addLetters(result)
+                // letter list view
+                addLetters(result)
+            }
+            else
+            {
+                Toast.makeText(
+                    this,
+                    "Word length not 5!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
@@ -94,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                 "Word '${word}' not in dictionary!",
                 Toast.LENGTH_LONG
             ).show()
-            return createWord("null")
+            return createWord("     ")
         }
     }
 
@@ -157,6 +168,12 @@ class MainActivity : AppCompatActivity() {
     {
         for(i in 0..4)
         {
+            // change to uppercase
+            wordleWord.word[i].letter = wordleWord.word[i].letter.uppercaseChar()
+
+            // check if alphabet
+            if(wordleWord.word[i].letter < 'A' || wordleWord.word[i].letter > 'Z')
+                continue
             when(wordleWord.word[i].backgroundColor)
             {
                 R.color.background_strike -> {
