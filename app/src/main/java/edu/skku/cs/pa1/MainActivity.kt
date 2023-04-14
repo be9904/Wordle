@@ -159,12 +159,32 @@ class MainActivity : AppCompatActivity() {
         {
             when(wordleWord.word[i].backgroundColor)
             {
-                R.color.background_strike -> strikeLetters.add(wordleWord.word[i])
-                R.color.background_ball   -> ballLetters.add(wordleWord.word[i])
-                R.color.background_out    -> outLetters.add(wordleWord.word[i])
+                R.color.background_strike -> {
+                    if(!isDuplicate(wordleWord.word[i], strikeLetters))
+                        strikeLetters.add(wordleWord.word[i])
+                }
+                R.color.background_ball   -> {
+                    if(!isDuplicate(wordleWord.word[i], ballLetters))
+                        ballLetters.add(wordleWord.word[i])
+                }
+                R.color.background_out    -> {
+                    if(!isDuplicate(wordleWord.word[i], outLetters))
+                        outLetters.add(wordleWord.word[i])
+                }
                 else -> println("Error when adding wordle letters to list")
             }
         }
+    }
+
+    fun isDuplicate(wordleLetter: WordleLetter, letterList: ArrayList<WordleLetter>) : Boolean
+    {
+        for(l in letterList)
+        {
+            if(wordleLetter.letter == l.letter)
+                return true
+        }
+
+        return false
     }
     //endregion
 }
