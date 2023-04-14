@@ -1,11 +1,13 @@
 package edu.skku.cs.pa1
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class WordAdapter (val context: Context, val wordleWords: ArrayList<WordleWord>):
     BaseAdapter() {
@@ -33,18 +35,34 @@ class WordAdapter (val context: Context, val wordleWords: ArrayList<WordleWord>)
         val letter4 = view.findViewById<TextView>(R.id.textViewLetter4)
         val letter5 = view.findViewById<TextView>(R.id.textViewLetter5)
 
-        letter1.setBackgroundColor(wordleWords[i].word[0].backgroundColor.rgb)
-        letter2.setBackgroundColor(wordleWords[i].word[1].backgroundColor.rgb)
-        letter3.setBackgroundColor(wordleWords[i].word[2].backgroundColor.rgb)
-        letter4.setBackgroundColor(wordleWords[i].word[3].backgroundColor.rgb)
-        letter5.setBackgroundColor(wordleWords[i].word[4].backgroundColor.rgb)
+        letter1.text = wordleWords[i].word[0].letter.toString()
+        letter2.text = wordleWords[i].word[1].letter.toString()
+        letter3.text = wordleWords[i].word[2].letter.toString()
+        letter4.text = wordleWords[i].word[3].letter.toString()
+        letter5.text = wordleWords[i].word[4].letter.toString()
 
-        letter1.setTextColor(wordleWords[i].word[0].textColor.rgb)
-        letter2.setTextColor(wordleWords[i].word[1].textColor.rgb)
-        letter3.setTextColor(wordleWords[i].word[2].textColor.rgb)
-        letter4.setTextColor(wordleWords[i].word[3].textColor.rgb)
-        letter5.setTextColor(wordleWords[i].word[4].textColor.rgb)
+        setLetterColor(letter1, i, 0)
+        setLetterColor(letter2, i, 1)
+        setLetterColor(letter3, i, 2)
+        setLetterColor(letter4, i, 3)
+        setLetterColor(letter5, i, 4)
 
         return view
+    }
+
+    fun setLetterColor(textView: TextView, i: Int, idx: Int)
+    {
+        textView.setBackgroundColor(
+            ContextCompat.getColor(
+                context,
+                wordleWords[i].word[idx].backgroundColor
+            ))
+
+        textView.setTextColor(
+            ContextCompat.getColor(
+                context,
+                wordleWords[i].word[idx].textColor
+            )
+        )
     }
 }

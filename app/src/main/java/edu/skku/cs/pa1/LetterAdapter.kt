@@ -29,9 +29,9 @@ class LetterAdapter (val context: Context, val letters: ArrayList<WordleLetter>)
 
         val textView = view.findViewById<TextView>(R.id.textViewLetter)
 
-        textView.text = letters.get(i).letter.toString()
-        textView.setBackgroundColor(letters.get(i).backgroundColor.rgb) // check here
-        textView.setTextColor(letters.get(i).textColor.rgb)
+//        textView.text = letters.get(i).letter.toString()
+//        textView.setBackgroundColor(letters.get(i).backgroundColor.rgb) // check here
+//        textView.setTextColor(letters.get(i).textColor.rgb)
 
         return view
     }

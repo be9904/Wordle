@@ -15,12 +15,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // read words from file
         val inputStream = applicationContext.assets.open("wordle_words.txt")
         val words: String = inputStream.readBytes().toString(Charsets.UTF_8)
         inputStream.close()
 
-        answer = "there" // set answer from txt file
-        tryWord("these", words)
+        // split textString to words and put in list
+        val wordArr = words.split('\n')
+
+        // set answer
+        answer = wordArr[(0..wordArr.size).random()] // set answer from txt file
+        println("answer: $answer")
+        tryWord("these", wordArr)
 
         val wordList = findViewById<ListView>(R.id.listViewWords)
 
@@ -31,26 +37,24 @@ class MainActivity : AppCompatActivity() {
         val letterListGreen = findViewById<ListView>(R.id.listViewGreen)
 
         // create adapters
-        val wordsLetterAdapter = WordAdapter(this, triedWords)
+        val wordAdapter = WordAdapter(this, triedWords)
         // val grayAdapter = LetterAdapter(this, createWord("there"))
 
         val editTextWordle = findViewById<EditText>(R.id.editTextWordle)
         val buttonSubmit = findViewById<Button>(R.id.buttonSubmit)
 
         buttonSubmit.setOnClickListener {
-            letterListWords.adapter = wordsLetterAdapter
+            wordList.adapter = wordAdapter
             val word = "there"
 
             //tryWord(editTextWordle.text.toString())
         }
     }
 
-    fun tryWord(word: String, textString: String){
+    fun tryWord(word: String, wordArr: List<String>){
         // bool to check if word is in dictionary
         var wordFound: Boolean = false
 
-        // split textString to words and put in list
-        val wordArr = textString.split('\n')
 
         // check if word is in dictionary
         for(wordleWord in wordArr)
@@ -72,11 +76,6 @@ class MainActivity : AppCompatActivity() {
                         createdWord.word[i].backgroundColor + ", " +
                         createdWord.word[i].textColor)
             }
-//            val createdWordleWord = createWord(word)
-//            for(i in 0..4)
-//            {
-//                Log.d("letter", createdWordleWord.word[i].letter.toString())
-//            }
         }
         else // word not found in dict
         {
@@ -105,17 +104,17 @@ class MainActivity : AppCompatActivity() {
         {
             if(checkPresence(i, wordleWord))
             {
-                wordleWord.word[i].backgroundColor = WordleLetter.Color.YELLOW
-                wordleWord.word[i].textColor = WordleLetter.Color.BLACK
+                wordleWord.word[i].backgroundColor = R.color.background_ball
+                wordleWord.word[i].textColor = R.color.text_ball
                 if(checkLocation(i, wordleWord))
                 {
-                    wordleWord.word[i].backgroundColor = WordleLetter.Color.GREEN
+                    wordleWord.word[i].backgroundColor = R.color.background_strike
                 }
             }
             else
             {
-                wordleWord.word[i].backgroundColor = WordleLetter.Color.GRAY
-                wordleWord.word[i].textColor = WordleLetter.Color.WHITE
+                wordleWord.word[i].backgroundColor = R.color.background_out
+                wordleWord.word[i].textColor = R.color.text_out
             }
         }
 
