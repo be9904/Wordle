@@ -177,6 +177,11 @@ class MainActivity : AppCompatActivity() {
             when(wordleWord.word[i].backgroundColor)
             {
                 R.color.background_strike -> {
+                    for(l in ballLetters)
+                        if(l.letter == wordleWord.word[i].letter){
+                            ballLetters.remove(l)
+                            break
+                        }
                     if(!isDuplicate(wordleWord.word[i], strikeLetters))
                         strikeLetters.add(wordleWord.word[i])
                 }
