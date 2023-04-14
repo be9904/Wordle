@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 class LetterAdapter (val context: Context, val letters: ArrayList<WordleLetter>):
     BaseAdapter() {
@@ -14,7 +15,7 @@ class LetterAdapter (val context: Context, val letters: ArrayList<WordleLetter>)
     }
 
     override fun getItem(position: Int): Any {
-        return letters.get(position)
+        return letters[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -29,9 +30,19 @@ class LetterAdapter (val context: Context, val letters: ArrayList<WordleLetter>)
 
         val textView = view.findViewById<TextView>(R.id.textViewLetter)
 
-//        textView.text = letters.get(i).letter.toString()
-//        textView.setBackgroundColor(letters.get(i).backgroundColor.rgb) // check here
-//        textView.setTextColor(letters.get(i).textColor.rgb)
+        textView.text = letters[i].letter.toString()
+        textView.setBackgroundColor(
+            ContextCompat.getColor(
+                context,
+                letters[i].backgroundColor
+            )
+        )
+        textView.setTextColor(
+            ContextCompat.getColor(
+                context,
+                letters[i].textColor
+            )
+        )
 
         return view
     }

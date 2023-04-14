@@ -16,7 +16,7 @@ class WordAdapter (val context: Context, val wordleWords: ArrayList<WordleWord>)
     }
 
     override fun getItem(position: Int): Any {
-        return wordleWords.get(position)
+        return wordleWords[position]
     }
 
     override fun getItemId(position: Int): Long {

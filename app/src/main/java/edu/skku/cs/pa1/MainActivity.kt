@@ -1,15 +1,17 @@
 package edu.skku.cs.pa1
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
 
 class MainActivity : AppCompatActivity() {
-    // list of attempted words
-    var triedWords = arrayListOf<WordleWord>()
     var answer: String = ""
+
+    // list of wordle words
+    var triedWords = arrayListOf<WordleWord>()
+    var outLetters = arrayListOf<WordleLetter>()
+    var ballLetters = arrayListOf<WordleLetter>()
+    var strikeLetters = arrayListOf<WordleLetter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,33 +27,46 @@ class MainActivity : AppCompatActivity() {
 
         // set answer
         answer = wordArr[(0..wordArr.size).random()] // set answer from txt file
-        println("answer: $answer")
-        tryWord("these", wordArr)
 
+        // log answer (erase later)
+        println("answer: $answer")
+
+        // Wordle word list view
         val wordList = findViewById<ListView>(R.id.listViewWords)
 
-        // List Views
-        val letterListWords = findViewById<ListView>(R.id.listViewWords)
+        // Wordle letter list Views
         val letterListGray = findViewById<ListView>(R.id.listViewGray)
         val letterListYellow = findViewById<ListView>(R.id.listViewYellow)
         val letterListGreen = findViewById<ListView>(R.id.listViewGreen)
 
         // create adapters
         val wordAdapter = WordAdapter(this, triedWords)
-        // val grayAdapter = LetterAdapter(this, createWord("there"))
+        val grayAdapter = LetterAdapter(this, outLetters)
+        val yellowAdapter = LetterAdapter(this, ballLetters)
+        val greenAdapter = LetterAdapter(this, strikeLetters)
 
-        val editTextWordle = findViewById<EditText>(R.id.editTextWordle)
+        // input field and button
+        val inputField = findViewById<EditText>(R.id.editTextWordle)
         val buttonSubmit = findViewById<Button>(R.id.buttonSubmit)
 
         buttonSubmit.setOnClickListener {
+            // set adapters
             wordList.adapter = wordAdapter
-            val word = "there"
+            letterListGray.adapter = grayAdapter
+            letterListYellow.adapter = yellowAdapter
+            letterListGreen.adapter = greenAdapter
 
-            //tryWord(editTextWordle.text.toString())
+            // word list view
+            val result = tryWord(inputField.text.toString(), wordArr) // try word on btn click
+            inputField.setText("") // clear input field
+
+            // letter list view
+            addLetters(result)
         }
     }
 
-    fun tryWord(word: String, wordArr: List<String>){
+    //region WORDLE_WORD
+    fun tryWord(word: String, wordArr: List<String>): WordleWord{
         // bool to check if word is in dictionary
         var wordFound: Boolean = false
 
@@ -68,14 +83,9 @@ class MainActivity : AppCompatActivity() {
 
         if(wordFound) // word found in dict
         {
-            val createdWord = matchWithAnswer(createWord(word))
+            val createdWord = checkWord(createWord(word))
             triedWords.add(createdWord) // add wordle word to attempts list
-            for(i in 0..4)
-            {
-                println(createdWord.word[i].letter + ", " +
-                        createdWord.word[i].backgroundColor + ", " +
-                        createdWord.word[i].textColor)
-            }
+            return createdWord
         }
         else // word not found in dict
         {
@@ -84,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 "Word '${word}' not in dictionary!",
                 Toast.LENGTH_LONG
             ).show()
+            return createWord("null")
         }
     }
 
@@ -98,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         return WordleWord(letterArray)
     }
 
-    private fun matchWithAnswer(wordleWord: WordleWord) : WordleWord
+    private fun checkWord(wordleWord: WordleWord) : WordleWord
     {
         for(i in 0..4)
         {
@@ -139,4 +150,21 @@ class MainActivity : AppCompatActivity() {
 
         return false
     }
+    //endregion
+
+    //region WORDLE_LETTER
+    fun addLetters(wordleWord: WordleWord)
+    {
+        for(i in 0..4)
+        {
+            when(wordleWord.word[i].backgroundColor)
+            {
+                R.color.background_strike -> strikeLetters.add(wordleWord.word[i])
+                R.color.background_ball   -> ballLetters.add(wordleWord.word[i])
+                R.color.background_out    -> outLetters.add(wordleWord.word[i])
+                else -> println("Error when adding wordle letters to list")
+            }
+        }
+    }
+    //endregion
 }
