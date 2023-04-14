@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         answer = wordArr[(0..wordArr.size).random()] // set answer from txt file
 
         // log answer (erase later)
-        println("answer: $answer")
+        // println("answer: $answer")
 
         // Wordle word list view
         val wordList = findViewById<ListView>(R.id.listViewWords)
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             {
                 Toast.makeText(
                     this,
-                    "Word length not 5!",
+                    "Word '${inputField.text.toString()}' not in dictionary!",
                     Toast.LENGTH_LONG
                 ).show()
             }
